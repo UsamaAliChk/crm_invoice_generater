@@ -14,16 +14,19 @@ function Maps() {
   const selectedCompany=useSelector(state=>state.getCompany)
   const dispatch=useDispatch();
   const [loading ,setloading]=useState(true);
-  const [price,setprice]=useState('');
+  const [price,setprice]=useState(0);
 const [totalPrice,settotalPrice]=useState(0);
 const [Uints,setUnits]=useState([]);
-const [qty,setqty]=useState('');
+const [qty,setqty]=useState(0);
 const [description,setdescription]=useState('')
-const [items,setitems]=useState([])
-const [selectedMemberId,setselectedMemberId]=useState()
+const [items,setitems]=useState([]);
+const [selectedMemberId,setselectedMemberId]=useState('');
 
+console.log(qty,price)
+const canAdd=description.length>0 && qty!==0 && price!==0;
+const isEnabled=canAdd && selectedMemberId!==''
 
-
+console.log(canAdd, description.length>0,qty!==0, price!==0)
 
 const handelDelete=(index)=>{
      let data=[]
@@ -219,11 +222,11 @@ const styles = {textAlign: 'center', fontSize: '26px', color: '#ff9900', positio
                     <Form.Control type="text" onChange={(e)=>{let value=parseInt(e.target.value) ;setprice(value)}}></Form.Control>
                 </Col>
                 <Col md="1">
-                    <Button style={{marginTop:"30px"}} onClick={e=>{let total=qty*price;let total2=totalPrice+total;settotalPrice(total2); setitems(old=>[...old,{description,qty,price,total}])}}>ADD</Button>
+                    <Button style={{marginTop:"30px"}} onClick={e=>{let total=qty*price;let total2=totalPrice+total;settotalPrice(total2); setitems(old=>[...old,{description,qty,price,total}])}} disabled={!canAdd}>ADD</Button>
                 </Col>
               </Row>
               <Row>
-                <Link to='typography'><Button style={{marginTop:"20px",marginLeft:"15px"}} onClick={handelClick}>CREATE</Button></Link>
+                <Link to='typography'><Button style={{marginTop:"20px",marginLeft:"15px"}} onClick={handelClick} disabled={!isEnabled}>CREATE</Button></Link>
               </Row>
             </Form>
           </Col>
