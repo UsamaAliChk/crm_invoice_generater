@@ -1,1 +1,0 @@
-const compnies=[{"name":"SAMWAYS","address":"city chakwal Pakistan building no 3 near Khaout Plaza","No":""}]

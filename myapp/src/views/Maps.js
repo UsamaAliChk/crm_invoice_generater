@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import {setData} from '../redux/action/index'
 import {useDispatch,useSelector} from 'react-redux'
 import axios from 'axios';
@@ -8,9 +8,13 @@ import {Col, Row,Badge,
    Container,Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Loader  from 'react-loader-spinner'
+import DatePicker from 'react-date-picker';
+import ShowList from './ShowList'
 
 function Maps() {
+  const [Caddress,setCaddress]=useState([]);
   const contacts=useSelector(state=>state.getContacts)
+  console.log(contacts)
   const selectedCompany=useSelector(state=>state.getCompany)
   const dispatch=useDispatch();
   const [loading ,setloading]=useState(true);
@@ -21,28 +25,15 @@ const [qty,setqty]=useState(0);
 const [description,setdescription]=useState('')
 const [items,setitems]=useState([]);
 const [selectedMemberId,setselectedMemberId]=useState('');
-
-console.log(qty,price)
+const [tax,settax]=useState(0);
+const [dueDate,setdueDate]=useState('');
 const canAdd=description.length>0 && qty!==0 && price!==0;
 const isEnabled=canAdd && selectedMemberId!==''
-
-console.log(canAdd, description.length>0,qty!==0, price!==0)
-
-const handelDelete=(index)=>{
-     let data=[]
-     for(let i=0;i<items.length;i++){
-       if(i===index){
-          totalPrice=totalPrice-items[i].price
-          settotal(totalPrice)
-       }
-       else(i!=index)
-        data.push(items[i])
-     }
-     setitems(data)
-}
+const [month,setmonths]=useState(1);
 
 
-const handelClick=()=>{
+
+const handelClick=async()=>{
 
   let companyAddress=[]
   if(selectedCompany[0].Address1!==null){
@@ -57,15 +48,23 @@ const handelClick=()=>{
   if(selectedCompany[0].Address4!==null){
     companyAddress.push(selectedCompany[0].Address4);
   }
-  console.log(companyAddress)
-  let company={name:selectedCompany[0].companyName,companyAddress,Number:selectedCompany[0].companyPhoneNumber};
 
+  let company={name:selectedCompany[0].companyName,CPName:selectedCompany[0].chairPersonName,
+    CPEmail:selectedCompany[0].chairPersonEmail,
+    CPNumber:selectedCompany[0].chairPersonNumber
+    ,PostalCode:selectedCompany[0].postalCode,Country:selectedCompany[0].Country,Email:selectedCompany[0].companyEmai
+    ,Town:selectedCompany.Town,companyAddress,Number:selectedCompany[0].companyPhoneNumber};
+
+    
     let address=[]
     let Name=''
     let phoneNumber=''
     let contactCompanyName=''
     let Email='';
     let id='';
+    let con='';
+    let t='';
+    let p='';
   for(let i =0;i<contacts.length;i++){
     if( contacts[i].contactId==selectedMemberId){
       if(contacts[i].Address1!==null){
@@ -82,18 +81,67 @@ const handelClick=()=>{
       }
       id=contacts[i].contactId;
       Name=contacts[i].title+' '+contacts[i].firstName+' '+contacts[i].lastName;
-      phoneNumber=contacts[i].companyPhoneNumber;
+      phoneNumber=contacts[i].contactPhoneNumber;
       contactCompanyName=contacts[i].companyName;
-      Email=contacts[i].companyEmail
+      Email=contacts[i].contactEmail
+      con=contacts[i].Country;
+      t=contacts[i].Town;
+      p=contacts[i].postalCode
     }
   }
+
+  let bankInfo={}
+  if(selectedCompany[0].bankName!==null){
+    bankInfo.bankName=selectedCompany[0].bankName;
+  }
+  else{
+    bankInfo.bankName=null
+  }
+  if(selectedCompany[0].accountNumber!==null){
+    bankInfo.accountNumber=selectedCompany[0].accountNumber;
+  }
+  else{
+    bankInfo.accountNumber=null
+  }
+  if(selectedCompany[0].sortCode!==null){
+    bankInfo.sortCode=selectedCompany[0].sortCode;
+  }
+  else{
+    bankInfo.sortCode=null
+  }
+  if(selectedCompany[0].swiftCode!==null){
+    bankInfo.swiftCode=selectedCompany[0].swiftCode;
+  }
+  else{
+    bankInfo.swiftCode=null
+  }
+  if(selectedCompany[0].accountName!==null){
+    bankInfo.accountName=selectedCompany[0].accountName;
+  }
+  else{
+    bankInfo.accountName=null
+  }
+  // if(selectedCompany[0].accountName!==null){
+  //     bankInfo.push(selectedCompany[0].accountName);
+  // }
+  // if(selectedCompany[0].bicCode!==null){
+  //   bankInfo.push(selectedCompany[0].bicCode);
+  // }
+  // if(selectedCompany[0].swiftCode!==null){
+  //   bankInfo.push(selectedCompany[0].swiftCode);
+  // }
+
  
-  axios
-    .post("http://localhost:5000/invoice",{items,totalPrice,contactCompanyName,Name})
-    .then(res => console.log(res))
-    .catch(err => console.error(err));
-let billing={Name,phoneNumber,address,contactCompanyName,Email,id}
-  dispatch(setData({company,billing,items,totalPrice}))
+
+  //console.log(invoices);
+
+let p1=totalPrice
+
+
+let billing={Name,Town:t,PostalCode:p,Country:con,phoneNumber,address,contactCompanyName,Email,id}
+//console.log(billing)
+
+  dispatch(setData({bankInfo,company,dueDate,billing,tax,items,vat:selectedCompany[0].vat,subTotal:p1,totalPrice:totalPrice+tax}))
 }
 const styles = {textAlign: 'center', fontSize: '26px', color: '#ff9900', position: 'fixed', verticalAlign: 'middle', left:'0px', top: '0px', width:'100%', height:'100%', backgroundColor: 'rgba(0,0,0,0.2)'}
   return (
@@ -104,6 +152,11 @@ const styles = {textAlign: 'center', fontSize: '26px', color: '#ff9900', positio
             <Form>
               <Row>
                 <Col md="4">
+                    <Form.Label style={{fontSize:"30px",marginBottom:'30px',textTransform:'uppercase'}}>{selectedCompany[0].companyName}</Form.Label>
+                </Col>
+              </Row>
+              <Row>
+                <Col md="4">
                 <Form.Group>
                   <Form.Label>Select Billing Member</Form.Label>
                   <Form.Control as="select" onChange={e=>{setselectedMemberId(parseInt(e.target.value))}}>
@@ -111,94 +164,41 @@ const styles = {textAlign: 'center', fontSize: '26px', color: '#ff9900', positio
                       {
                         contacts.map(e=>{
                           let name=e.title+' '+e.firstName+' '+e.lastName;
+                          if(e.contactType==="billing"){
                           return(
                             <option value={e.contactId}>{name}</option>
-                          )
+                          )}
                         })
                       }
                   </Form.Control>
                 </Form.Group>
-                </Col>
-                <Col md="4">
-                <Form.Label>Address</Form.Label>
-                <Form.Control
-                defaultValue="ABC CHAKWAL"
-                disabled
-                type="text"
-                >
-                </Form.Control>
-                </Col>
-                <Col md="4">
-                <Form.Label>Phone Number</Form.Label>
-                <Form.Control
-                defaultValue={selectedCompany.companyPhoneNumber}
-                disabled
-                type="text"
-                >
-                </Form.Control>
-                </Col>
-              </Row>
-
-              <Row>
-                <Col md="4">
-                <Form.Group>
-                  <Form.Label>Country</Form.Label>
-                  <Form.Control 
-                  type="text"
-                  defaultValue={selectedCompany.Country}
-                  disabled
-                  >
-            
-                  </Form.Control>
-                </Form.Group>
-                </Col>
-                <Col md="4">
-                <Form.Label>City</Form.Label>
-                <Form.Control
-                defaultValue="CHAKWAL"
-                disabled
-                type="text"
-                >
-                </Form.Control>
-                </Col>
                 
-              </Row>
-              
-
-              {
-                (items!==[])?
-                items.map((e,i)=>{
-                  return(
-                    <div style={{marginBottom:"20px"}} key={i}>
-                        <Row>
-                          <Col md="5">
-                            <Form.Control type="text" defaultValue={e.description}></Form.Control>
-                          </Col>
-                          <Col md="1">
-                            <Form.Control type="text" defaultValue={e.qty}></Form.Control>
-                          </Col>
-                          <Col md="2">
-                       
-                            <Form.Control type="text" defaultValue={e.price}></Form.Control>
-                          </Col>
-                          <Col md="1">
-                           
-                            <Form.Control defaultValue={e.total} disabled></Form.Control>
-                          </Col>
-                          <Col md="1">
-                              <Button variant="danger" id={i} onClick={e=>{handelDelete(e.target.id)}} >DELETE</Button>
-                          </Col>
-                        </Row>
-                    </div>
-                  )
-                }):null
-              }
+                </Col>
+                <Col md="4">
+                  <Form.Label>Due Date</Form.Label>
+                  <Form.Control type="date" onChange={e=>{
+                    let d=e.target.value.toString();
+                    let y=d.slice(0,4);
+                    let m=d.slice(5,7)
+                    let day=d.slice(8,10);
+                    let s=day+"-"+m+"-"+y
+                    setdueDate(s)
+                    }}>
+                  </Form.Control>
+                </Col>
+                <Col md="4">
+                  <Form.Label>Vat Rate</Form.Label>
+                  <Form.Control type="text" disabled value={selectedCompany[0].vat+"%"}>
+                  </Form.Control>
+                </Col>
+                </Row>
+              <ShowList items={items} tax={tax} setitems={setitems} total={totalPrice} settotalPrice={settotalPrice} settax={settax} vat={selectedCompany[0].vat}/>
 
               <Row>
-                <Col md="6">
+                <Col md="4">
                 
                     <Form.Label>Description</Form.Label>
-                    <Form.Control type="text" onChange={e=>{setdescription(e.target.value);}} >
+                    <Form.Control as="textarea" rows={3} type="text" onChange={e=>{setdescription(e.target.value);}} >
                     </Form.Control>
                 </Col>
                 <Col md="2">
@@ -218,15 +218,67 @@ const styles = {textAlign: 'center', fontSize: '26px', color: '#ff9900', positio
                   </Form.Control>
                 </Col>
                 <Col md="2">
+                  <Form.Label>Months</Form.Label>
+                <Form.Control as="select" onChange={(e)=>{let val=parseInt(e.target.value);setmonths(val)}}>
+                      <option>Select Months</option>
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                      <option>6</option>
+                  </Form.Control>
+                </Col>
+                <Col md="2">
                     <Form.Label>Price</Form.Label>
                     <Form.Control type="text" onChange={(e)=>{let value=parseInt(e.target.value) ;setprice(value)}}></Form.Control>
                 </Col>
                 <Col md="1">
-                    <Button style={{marginTop:"30px"}} onClick={e=>{let total=qty*price;let total2=totalPrice+total;settotalPrice(total2); setitems(old=>[...old,{description,qty,price,total}])}} disabled={!canAdd}>ADD</Button>
+                    <Button style={{marginTop:"30px",color:"black"}} onClick={e=>{
+                      let s5=0
+                      if(!isNaN(qty)){
+                      let total=(qty*price)*month;
+                      let total2=totalPrice+total;
+                      s5=total2
+                      settotalPrice(total2); 
+                      setitems(old=>[...old,{description,qty,price,total,id:Math.random(),month}])}
+                      else{
+                        setitems(old=>[...old,{description,qty:0,price:0,total:0,id:Math.random()}])
+                      }
+                      
+                      if(selectedCompany[0].vat!==null){
+                        let p2=parseInt(selectedCompany[0].vat);
+                        let per=(s5*p2)/100;                       
+                        settax(per)
+                      }
+                        else{
+                        settax(0)
+                        }
+
+
+                      }} disabled={!canAdd}>ADD</Button>
                 </Col>
               </Row>
-              <Row>
-                <Link to='typography'><Button style={{marginTop:"20px",marginLeft:"15px"}} onClick={handelClick} disabled={!isEnabled}>CREATE</Button></Link>
+              
+              <Row style={{marginTop:"20px"}}>
+                <Col md="4" >
+                <Link to={'notifications'}><Button style={{marginLeft:"15px",color:'black'}} onClick={handelClick} disabled={!isEnabled}>CREATE</Button></Link>
+                </Col>
+                <Col md="6" style={{marginLeft:'100px'}}>
+                  <Row >
+                    <Col><p style={{marginLeft:'80px',marginTop:'3px'}}>Sub Total</p></Col> 
+                    <Col><Form.Control type="Text" value={totalPrice} disabled></Form.Control></Col>
+                  </Row>
+                  <Row style={{marginTop:"10px"}}>
+                    <Col ><p style={{marginLeft:'80px',marginTop:'3px'}}>Vat</p></Col> 
+                    <Col><Form.Control type="Text" value={tax} disabled></Form.Control></Col>
+                  </Row>
+                  <Row>
+                    <Col><p style={{marginLeft:'80px',marginTop:'3px'}}>Total</p></Col> 
+                    <Col><Form.Control type="Text" value={totalPrice+tax} disabled></Form.Control></Col>
+                  </Row>
+                 
+                  </Col>
               </Row>
             </Form>
           </Col>

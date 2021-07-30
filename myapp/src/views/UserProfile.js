@@ -1,51 +1,59 @@
-import React,{useState,useEffect} from "react";
-import Image1 from '../Logos/1.jpeg'
-import Image2 from '../Logos/2.jpeg'
-import Image3 from '../Logos/3.jpeg'
-import Image4 from '../Logos/4.jpeg'
-import Image5 from '../Logos/5.jpeg'
-import Image6 from '../Logos/6.jpeg'
-import invoice from '../Logos/7.jpeg'
+import React,{useState} from "react";
+
 import {Link} from 'react-router-dom'
-import BigLoad from '../components/BigLoad'
-// react-bootstrap components
+
 import {
-  Badge,
+  FormLabel,FormControl,
   Button,
   Card,
   Form,
-  Navbar,
-  Nav,
   Container,
   Row,
   Col,
   Table
 } from "react-bootstrap";
 
-import {useSelector} from 'react-redux';
-import Loader from 'react-loader-spinner';
+
+import AddAcountDetail from '../Models/AddAcountDetail'
+import {useSelector} from 'react-redux'
+import AddContact from '../Models/AddContact'
+import EditContact from '../Models/EditContact'
+import Loader from '../loader/Loading'
 function User() {
 
-
-
+  const [open,setopen]=useState(false)
+  const [Loading,setLoading]=useState(true)
+  const [IsOpen,setIsOpen]=useState(false)
+  const [Edit,setEdit]=useState(false)
   const data=useSelector(state=>state.getCompany);
   const contacts=useSelector(state=>state.getContacts);
-  console.log(data)
-  const styles = {textAlign: 'center', fontSize: '26px', color: '#ff9900', position: 'fixed', verticalAlign: 'middle', left:'0px', top: '0px', width:'100%', height:'100%', backgroundColor: 'rgba(0,0,0,0.2)'}
-  if(data.length===0){
-      return(
-        <div style={styles}>
-          <div style={{paddingTop:"300px",paddingLeft:"50px"}}>
-        <Loader  type="Circles"
-        color="#595959"
-        height={100}
-        width={100}/></div></div>
-      )   
-  }
-  else{
+  if(data.length>0 && Loading===true) {setLoading(false); } 
+  const [contactData,setcontactData]=useState([]);
+  const [id1,setid1]=useState('');
+  
+  const editContact=(id)=>{
+    let s={}
+    for(let i=0;i<contacts.length;i++){
+        if(contacts[i].contactId===id){
+          s=contacts[i];
+        }
+    }
+    setcontactData(s);
+    setid1(id);
+    //console.log(s);
+    setEdit(true);
+}
+ 
   return (
-    
+  
     <>
+      <AddAcountDetail open={open} setopen={setopen} data={data} setLoading={setLoading}/>
+      <EditContact Edit={Edit} setEdit={setEdit} id1={id1} contactData={contactData} setLoading={setLoading}/>
+      <AddContact IsOpen={IsOpen} data={data} setLoading={setLoading} contacts={contacts} setIsOpen={setIsOpen}/> 
+      {
+
+        Loading? <Loader show={true}/>:
+
       <Container fluid>
         <Row>
           <Col md="8">
@@ -55,116 +63,130 @@ function User() {
               </Card.Header>
               <Card.Body>
                 <Form>
-                  <Row>
-                    <Col className="pr-1" md="5">
+                 
+                    <Row>
+                    <Col className="pr-1" md="3">
                       <Form.Group>
-                        <label>Company</label>
-                        <Form.Control
+                        <label>Company Name</label>
+                        <p>{data[0].companyName}</p>
+                        {/* <Form.Control
                           defaultValue={data[0].companyName}
                           disabled
                           placeholder="SAMWAYS"
                           type="text"
-                        ></Form.Control>
+                        ></Form.Control> */}
                       </Form.Group>
                     </Col>
                     <Col className="px-1" md="3">
                       <Form.Group>
                         <label>Contact Number</label>
-                        <Form.Control
+                        <p>{data[0].companyPhoneNumber}</p>
+                        {/* <Form.Control
                           defaultValue={data[0].companyPhoneNumber}
                           placeholder="Number"
                           type="text"
                           disabled
-                        ></Form.Control>
+                        ></Form.Control> */}
                       </Form.Group>
                     </Col>
                     <Col className="pl-1" md="4">
                       <Form.Group>
-                        <label htmlFor="exampleInputEmail1">
+                        {
+                          (data[0].companyEmail!=='')?
+                          <div>
+                            <label htmlFor="exampleInputEmail1">
                           Email address
                         </label>
-                        <Form.Control
+                        <p>{data[0].companyEmail}</p>
+                          </div>
+                          :null
+                        }
+                        
+                        {/* <Form.Control
                         defaultValue={data[0].companyEmail}
                           placeholder="Email"
                           type="email"
                           disabled
-                        ></Form.Control>
+                        ></Form.Control> */}
                       </Form.Group>
                     </Col>
                   </Row>
-                  {/* <Row>
-                    <Col className="pr-1" md="6">
-                      <Form.Group>
-                        <label>First Name</label>
-                        <Form.Control
-                          defaultValue="Mike"
-                          placeholder="Company"
-                          type="text"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                    <Col className="pl-1" md="6">
-                      <Form.Group>
-                        <label>Last Name</label>
-                        <Form.Control
-                          defaultValue="Andrew"
-                          placeholder="Last Name"
-                          type="text"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                  </Row> */}
+                  
                   <Row>
-                    <Col md="12">
+                    <Col md="6">
                       <Form.Group>
-                        <label>Address</label>
-                        <Form.Control
+                        <label>Address 1</label>
+                        <p>{data[0].Address1}</p>
+                        {/* <Form.Control
                           defaultValue={data[0].Address1}
-                          placeholder="Home Address"
+                          placeholder="Address"
                           type="text"
-                        ></Form.Control>
+                        ></Form.Control> */}
                       </Form.Group>
                     </Col>
+                    {
+                      (data[0].address2!=="")?
+                      <Col md="6">
+                      <Form.Group>
+                        <label>Address 2</label>
+                        <p>{data[0].Address2}</p>
+                        {/* <Form.Control
+                          defaultValue={data[0].Address1}
+                          placeholder="Address"
+                          type="text"
+                        ></Form.Control> */}
+                      </Form.Group>
+                      </Col>:null
+                    }
                   </Row>
                   <Row>
-                    
-                    <Col className="px-1" md="4">
+                  {
+                      (data[0].Address3!=="")?<Col className="pl-1" md="3" style={{marginLeft:'15px'}}>
                       <Form.Group>
-                        <label>Country</label>
-                        <Form.Control
-                          defaultValue={data[0].Country}
-                          placeholder="Country"
-                          type="text"
-                          disabled
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                    <Col className="pl-1" md="4">
-                      <Form.Group>
-                        <label>Postal Code</label>
-                        <Form.Control
+                        <label>Address 3</label>
+                        <p>{data[0].Address3}</p>
+                        {/* <Form.Control
                           defaultValue={data[0].postalCode}
                           disabled
                           placeholder="ZIP Code"
                           type="text"
-                        ></Form.Control>
+                        ></Form.Control> */}
                       </Form.Group>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col md="12">
+                    </Col>:null
+                    }
+                    <Col className="px-1" md="4" style={{marginLeft:'15px'}}>
                       <Form.Group>
-                        <label>About</label>
-                        <Form.Control
-                          cols="80"
-                          defaultValue="Samways, Inc. is a Pakistani online travel company that operates a website and mobile app with user-generated content and a comparison shopping website.It also offers online hotel reservations and bookings for transportation, lodging, travel experiences, and restaurants."
-                          placeholder="Here can be your description"
-                          rows="4"
-                          as="textarea"
-                        ></Form.Control>
+                        <label>Country</label>
+                        <p>{data[0].Country}</p>
+                        {/* <Form.Control
+                          defaultValue={data[0].Country}
+                          placeholder="Country"
+                          type="text"
+                          disabled
+                        ></Form.Control> */}
                       </Form.Group>
                     </Col>
+                    {
+                      (data[0].postalCode!=="")?<Col className="pl-1" md="3">
+                      <Form.Group>
+                        <label>Postal Code</label>
+                        <p>{data[0].postalCode}</p>
+                        {/* <Form.Control
+                          defaultValue={data[0].postalCode}
+                          disabled
+                          placeholder="ZIP Code"
+                          type="text"
+                        ></Form.Control> */}
+                      </Form.Group>
+                    </Col>:null
+                    }
+                    </Row>
+                  <Row >
+                    <Col md="4">
+                      <Button style={{color:"black"}} onClick={e=>setopen(true)}>Add Bank Details</Button>                    
+                    </Col>
                   </Row>
+                
 
         
                   {/* <Button
@@ -186,27 +208,29 @@ function User() {
                 <img
                   alt="..."
                   src={
-                    require("assets/img/photo-1431578500526-4d9613015464.jpeg")
-                      .default
+                    "https://crm-companies-logos.s3.amazonaws.com/background.jpeg"
                   }
                 ></img>
               </div>
               <Card.Body>
                 <div className="author">
+                  
                   <a href="#pablo" onClick={(e) => e.preventDefault()}>
                     <img
                       alt="..."
+                      style={{objectFit:'contain'}}
                       className="avatar border-gray"
-                      src={Image1}
-                    ></img>
-                    <h5 className="title">SAMWAYS</h5>
+                      src={data[0].logoUrl}
+                    />
+                   
                   </a>
-                  <p className="description">michael24</p>
+                  
+                  <h5  style={{textTransform:'uppercase',fontWeight:'bold'}}>{data[0].companyName}</h5>
+                  <p className="description">{data[0].chairPersonName}</p>
+                  <p className="description">{data[0].companyPhoneNumber}</p>
                 </div>
                 <p className="description text-center">
-                  "Lamborghini Mercy <br></br>
-                  Your chick she so thirsty <br></br>
-                  I'm in that two seat Lambo"
+                  {data[0].chairPersonEmail}
                 </p>
               </Card.Body>
               <hr></hr>
@@ -246,13 +270,15 @@ function User() {
               <Col md='8'>
               <Card>
                   <Card.Header>
-                <Card.Title as="h4">Samways Contacts List</Card.Title>
+                <Card.Title as="h4">{data[0].companyName} Contacts List</Card.Title>
                 <p className="card-category">
-                  Here is a list of all contacts
+                  Here is a list of all billing contacts and other contacts
                 </p>
               </Card.Header>
                   <Card.Body>
+                  <Button onClick={e=>setIsOpen(true)} style={{marginBottom:'20px'}}>ADD CONTACT</Button>
                 <Table >
+                 
                 <thead>
                     <tr>
                       <th className="border-0">ID</th>
@@ -271,15 +297,11 @@ function User() {
                         <td>{name}</td>
                           <td>{e.companyName}</td>
                           <td>{e.contactEmail}</td>
+                          <td className="editIcon" onClick={e1=>{editContact(e.contactId)}}><i class="far fa-edit"></i></td>
                         </tr>
                         )
                       })
-                    }
-                   
-                    
-                    
-                   
-                  
+                    }         
                   </tbody>
                 </Table>
               </Card.Body>
@@ -288,12 +310,7 @@ function User() {
                 
               <Col md="4">
                 <Row>
-                <div>
-                <img src={invoice} style={{height:"360px",width:"330px"}}/>
-                </div>
-                </Row>
-                <Row>
-                <Link to={"maps"}><Button style={{marginLeft:"15px",width:"230px"}}>GENERATE INVOICE</Button></Link>
+                <Link to={"maps"}><Button style={{marginLeft:"15px",width:"320px",marginTop:'0px'}}>GENERATE INVOICE</Button></Link>
                 </Row>
               
               </Col>
@@ -302,9 +319,9 @@ function User() {
 
 
 
-      </Container>
+      </Container>}
     </>
-  );}
+  );
 }
 
 export default User;

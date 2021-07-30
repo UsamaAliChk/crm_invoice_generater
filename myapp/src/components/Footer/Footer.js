@@ -32,23 +32,19 @@ class Footer extends Component {
               </li>
               <li>
                 <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                  Company
+                  Companies
                 </a>
               </li>
               <li>
                 <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                  Portfolio
+                  invoice templates
                 </a>
               </li>
-              <li>
-                <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                  Blog
-                </a>
-              </li>
+              
             </ul>
             <p className="copyright text-center">
-              © {new Date().getFullYear()}{" "}
-              <a href="http://www.creative-tim.com">Creative Tim</a>, made with
+              © 2020 {" "}
+              <a href="http://www.creative-tim.com"> Spire Tech</a>, made with
               love for a better web
             </p>
           </nav>

@@ -40,6 +40,13 @@
 .all-icons input{
     border: 0;
 }
+.editIcon{
+  color: #00bbff;
+}
+.editIcon:hover{
+  font-size: 20px;
+  cursor: pointer;
+}
 .all-icons .font-icon-detail{
     text-align: center;
     padding: 45px 0px 30px;
@@ -803,4 +810,53 @@
     position: relative;
     display: block;
     width: 100%;
+}
+
+.modal-top{
+  width:100%;
+  height:70px ; 
+  background-color:black;
+  border-Radius:15px;
+  color: white;
+  text-align: center;
+  justify-content: center;
+  margin-left: 5px;
+}
+.modal-image{
+    margin-top: 10px;
+    height: 330px;
+    width: 285px;
+    border-radius: 10px;
+    margin-left: 5px;
+}
+.space-btw-inputs{
+  margin-top: 10px;
+}
+.modal-buttons-container{
+  margin-top:30px;
+  display:flex;
+  flex-direction:row;
+  justify-content:space-between;
+  margin-bottom: 30px;
+}
+.modal-button{
+  background-Color:black;
+  color:white;
+  border:none
+}
+.account-modal-image{
+  height: 465px;
+  width: 350px;
+  margin-left: 5px;
+  border-radius: 10px;
+}
+.modal-shadow{
+
+}
+.modal-image-compnay-address{
+  margin-top: 10px;
+  height: 430px;
+  width: 285px;
+  border-radius: 10px;
+  margin-left: 5px; 
 }

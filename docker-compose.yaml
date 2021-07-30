@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  fontend:
+    build: ./myapp/
+    depends_on: 
+      - web
+    ports: 
+      - 3000:3000 
+  db:
+    build: ./mysql
+  web:
+    build: ./
+    ports:
+      - 3001:3001
+      - 5000:5000
+    depends_on:
+      - db
+    restart: on-failure
+  

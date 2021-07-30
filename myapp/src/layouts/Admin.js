@@ -4,11 +4,11 @@
 * Light Bootstrap Dashboard React - v2.0.0
 =========================================================
 
-* Product Page: https://www.creative-tim.com/product/light-bootstrap-dashboard-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
+
+* Copyright 2020 Spire Tech (https://www.spireTrade.com)
 * Licensed under MIT (https://github.com/creativetimofficial/light-bootstrap-dashboard-react/blob/master/LICENSE.md)
 
-* Coded by Creative Tim
+* Coded by Usama Ali
 
 =========================================================
 
@@ -22,9 +22,10 @@ import { useLocation, Route, Switch } from "react-router-dom";
 import AdminNavbar from "components/Navbars/AdminNavbar";
 import Footer from "components/Footer/Footer";
 import Sidebar from "components/Sidebar/Sidebar";
-import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
-import BigLoad from 'components/BigLoad'
+
 import routes from "routes.js";
+
+
 
 import sidebarImage from "assets/img/sidebar-3.jpg";
 
@@ -40,7 +41,7 @@ function Admin() {
       if (prop.layout === "/admin") {
         return (
           <Route
-            path={prop.layout + prop.path}
+            path={prop.layout +prop.path}
             render={(props) => <prop.component {...props} />}
             key={key}
           />
