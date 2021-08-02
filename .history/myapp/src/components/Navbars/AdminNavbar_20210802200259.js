@@ -36,23 +36,18 @@ function Header() {
   };
 
   const getBrandText = () => {
-
     for (let i = 0; i < routes.length; i++) {
-      console.log(location.pathname.indexOf(routes[i].layout + routes[i].path))
-      
       if (location.pathname.indexOf(routes[i].layout + routes[i].path) !== -1) {
         return routes[i].name;
       }
     }
- 
     return "Brand";
   };
   return (
     <Navbar bg="light" expand="lg">
       <Container fluid>
-        
+        <h4>CRM INVOICE GENERATOR</h4>
         <div className="d-flex justify-content-center align-items-center ml-2 ml-lg-0">
-
           <Button
             variant="dark"
             className="d-lg-none btn-fill d-flex justify-content-center align-items-center rounded-circle p-2"
@@ -60,13 +55,12 @@ function Header() {
           >
             <i className="fas fa-ellipsis-v"></i>
           </Button>
-          <h3 style={{marginTop:'25px'}}>CRM INVOICE GENERATOR</h3>
           <Navbar.Brand
             href="#home"
             onClick={(e) => e.preventDefault()}
-            className="pl-2 mt-3"
+            className="mr-2"
           >
-            {"> "}{getBrandText()}
+            {getBrandText()}
           </Navbar.Brand>
         </div>
         <Navbar.Toggle aria-controls="basic-navbar-nav" className="mr-2">

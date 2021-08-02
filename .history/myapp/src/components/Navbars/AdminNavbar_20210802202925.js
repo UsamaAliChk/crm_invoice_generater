@@ -37,6 +37,7 @@ function Header() {
 
   const getBrandText = () => {
 
+    console.log(routes);
     for (let i = 0; i < routes.length; i++) {
       console.log(location.pathname.indexOf(routes[i].layout + routes[i].path))
       
@@ -44,7 +45,7 @@ function Header() {
         return routes[i].name;
       }
     }
- 
+    debugger
     return "Brand";
   };
   return (

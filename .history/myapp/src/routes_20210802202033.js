@@ -54,7 +54,7 @@ const dashboardRoutes = [
   },
   {
     path: "/GetInvoiceInfo",
-    name: "Invoice Data",
+    name: "INVOICES",
     component: GetInvoiceInfo,
     layout: "/admin",
   },

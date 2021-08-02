@@ -309,7 +309,7 @@ function CompanyDetail() {
                 
               <Col md="4">
                 <Row>
-                <Link to={"GetInvoiceInfo"}><Button style={{marginLeft:"15px",width:"320px",marginTop:'0px'}}>GENERATE INVOICE</Button></Link>
+                <Link to={"getInvoiceInfo"}><Button style={{marginLeft:"15px",width:"320px",marginTop:'0px'}}>GENERATE INVOICE</Button></Link>
                 </Row>
               
               </Col>

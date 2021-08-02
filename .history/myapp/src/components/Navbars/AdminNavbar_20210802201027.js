@@ -36,15 +36,11 @@ function Header() {
   };
 
   const getBrandText = () => {
-
     for (let i = 0; i < routes.length; i++) {
-      console.log(location.pathname.indexOf(routes[i].layout + routes[i].path))
-      
       if (location.pathname.indexOf(routes[i].layout + routes[i].path) !== -1) {
         return routes[i].name;
       }
     }
- 
     return "Brand";
   };
   return (
@@ -60,11 +56,11 @@ function Header() {
           >
             <i className="fas fa-ellipsis-v"></i>
           </Button>
-          <h3 style={{marginTop:'25px'}}>CRM INVOICE GENERATOR</h3>
+          <Navbar.Brand><strong>CRM INVOICE GENERATOR</strong></Navbar.Brand>
           <Navbar.Brand
             href="#home"
             onClick={(e) => e.preventDefault()}
-            className="pl-2 mt-3"
+            className="pl-2"
           >
             {"> "}{getBrandText()}
           </Navbar.Brand>
