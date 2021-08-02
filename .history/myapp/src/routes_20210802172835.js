@@ -66,24 +66,18 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
-    path: "/info/InvoiceTemplates",
-    show:false,
-    icon: "nc-icon nc-bell-55",
-    component: InvoiceTemplates,
-    layout: "/admin",
-  },
-  {
-    path: "/InvoiceTemplates",
+    path: "info/InvoiceTemplates",
     name: "INVIOCE TEMPLATES",
     show:true,
     icon: "nc-icon nc-bell-55",
     component: InvoiceTemplates,
     layout: "/admin",
   },
+  
   {
     path: "/invoices",
     name: "INVOICES",
-    show:false,
+    show:true,
     icon: "fas fa-file-invoice-dollar",
     component: ShowInvoices,
     layout: "/admin",

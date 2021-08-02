@@ -59,7 +59,7 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
-    path: "/info/PDFView",
+    path: "info/PDFView",
     name: "INVOICE PREVIEW",
     icon: "nc-icon nc-paper-2",
     component: PDFView,
@@ -67,7 +67,6 @@ const dashboardRoutes = [
   },
   {
     path: "/info/InvoiceTemplates",
-    show:false,
     icon: "nc-icon nc-bell-55",
     component: InvoiceTemplates,
     layout: "/admin",
@@ -83,7 +82,7 @@ const dashboardRoutes = [
   {
     path: "/invoices",
     name: "INVOICES",
-    show:false,
+    show:true,
     icon: "fas fa-file-invoice-dollar",
     component: ShowInvoices,
     layout: "/admin",

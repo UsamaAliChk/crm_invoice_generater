@@ -16,14 +16,14 @@
 
 */
 import Dashboard from "views/Dashboard.js";
-import CompanyDetail from "views/CompanyDetail.js";
+import UserProfile from "views/UserProfile.js";
 import Companies from "views/Companies.js";
 import PDFView from "views/PDFView.js";
-import ShowInvoices from "views/ShowInvoices.js";
+import Icons from "views/Icons.js";
 import GetInvoiceInfo from "views/GetInvoiceInfo.js";
 import InvoiceTemplates from "views/InvoiceTemplates.js";
 
-
+import CompanyDetail from "./components/Company/CompanyDetail";
 
 const dashboardRoutes = [
  
@@ -41,7 +41,7 @@ const dashboardRoutes = [
     path: "/user",
     name: "Company Detail",
     icon: "nc-icon nc-circle-09",
-    component: CompanyDetail,
+    component: UserProfile,
     layout: "/admin",
   },
   {
@@ -59,17 +59,10 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
-    path: "/info/PDFView",
+    path: "/PDFView",
     name: "INVOICE PREVIEW",
     icon: "nc-icon nc-paper-2",
     component: PDFView,
-    layout: "/admin",
-  },
-  {
-    path: "/info/InvoiceTemplates",
-    show:false,
-    icon: "nc-icon nc-bell-55",
-    component: InvoiceTemplates,
     layout: "/admin",
   },
   {
@@ -80,12 +73,13 @@ const dashboardRoutes = [
     component: InvoiceTemplates,
     layout: "/admin",
   },
+  
   {
     path: "/invoices",
     name: "INVOICES",
-    show:false,
+    show:true,
     icon: "fas fa-file-invoice-dollar",
-    component: ShowInvoices,
+    component: Icons,
     layout: "/admin",
   },
   {

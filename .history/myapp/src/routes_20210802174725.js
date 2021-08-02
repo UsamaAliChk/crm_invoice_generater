@@ -83,7 +83,7 @@ const dashboardRoutes = [
   {
     path: "/invoices",
     name: "INVOICES",
-    show:false,
+    show:true,
     icon: "fas fa-file-invoice-dollar",
     component: ShowInvoices,
     layout: "/admin",

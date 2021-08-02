@@ -20,7 +20,7 @@ FormLabel,FormControl,
 import Loader from '../loader/Loading'
 import CompanyAddModel from '../Models/CompanyAddModel'
 import CompanyEditModel from '../Models/CompanyEditModel'
-function TableList() {
+function Companies() {
 
 const [IsOpen,setIsOpen]=useState(false)
 const [companyData,setcompanyData]=useState('');
@@ -118,6 +118,7 @@ const searchByName=(value)=>{
       <Container fluid>
         <Row>
           <Col md="10">
+            
             <Card className="strpied-tabled-with-hover">
               <Card.Header>
                 <Card.Title as="h4">COMPANIES</Card.Title>
